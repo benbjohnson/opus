@@ -1,0 +1,32 @@
+#!/usr/bin/env ruby
+
+$:.unshift(File.join(File.dirname(File.expand_path(__FILE__)), '..', 'lib'))
+
+require 'rubygems'
+require 'opus'
+require 'commander/import'
+
+program :name, 'Opus'
+program :version, Opus::VERSION
+program :description, 'Command line utility for printing columnized code.'
+default_command :generate
+
+command :generate do |c|
+  c.syntax = 'opus generate FILE'
+  c.description = 'Generates a PDF from a list of source files.'
+  c.option '-c NUM', '--columns NUM', 'The number of columns per page.'
+  c.option '-o FILE', '--output FILE', 'The name of the output file.'
+  c.when_called do|args, options|
+    filenames = args
+    output = options.output
+
+    # Validate input.
+    abort("opus: one or more input files required") if filenames.empty?
+    abort("opus: output file required: --output") if options.output.nil?
+
+    # Generate the PDF.
+    opus = Opus.new()
+    opus.column_count = options.columns.to_i unless options.columns.nil?
+    opus.generate(filenames, output)
+  end
+end
