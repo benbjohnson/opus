@@ -1,4 +1,4 @@
-opus
-====
+# Opus
+> Command line utility for printing columnized code.
 
-Command line utility for printing columnized code.
+-----
